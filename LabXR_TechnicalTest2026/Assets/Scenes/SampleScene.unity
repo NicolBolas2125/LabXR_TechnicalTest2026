@@ -129,6 +129,7 @@ GameObject:
   m_Component:
   - component: {fileID: 327852899}
   - component: {fileID: 327852898}
+  - component: {fileID: 327852900}
   m_Layer: 0
   m_Name: ControleurDeJeu
   m_TagString: Untagged
@@ -148,6 +149,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 82e9f58efb984d045a11ee75972dbc0c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::PositionSouris
+  chemin: []
 --- !u!4 &327852899
 Transform:
   m_ObjectHideFlags: 0
@@ -163,6 +165,18 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &327852900
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 327852897}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: cceefccc02cb12941bea67f415b5cad1, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::AEtoile
 --- !u!1 &330585543
 GameObject:
   m_ObjectHideFlags: 0

@@ -14,7 +14,7 @@ public class CelluleDeGrille : MonoBehaviour
     private EtatDeCellule _propreEtat;
 
     // Permet d'accéder à la variable hors de la classe
-    public EtatDeCellule State
+    public EtatDeCellule Etat
     {
         get { return _propreEtat; }
         set { _propreEtat = value; }

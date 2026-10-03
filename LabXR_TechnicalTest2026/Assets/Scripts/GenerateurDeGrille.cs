@@ -1,17 +1,37 @@
 using UnityEngine;
 
-public class GridGenerator : MonoBehaviour
+public class GenerateurDeGrille : MonoBehaviour
 {
+    // Référence unique vers cette classe
+    static GenerateurDeGrille _instance;
+
+    // Moyen d'accès hors de la classe
+    public static GenerateurDeGrille instance
+    {
+        get
+        {
+            return _instance;
+        }
+    }
+  
     // Référence vers l'instanciation d'une case
     [SerializeField]
     private CelluleDeGrille _celluleGrillePrefab;
     
     // Taile de la grille que l'on veut instancier
     [SerializeField]
-    private int _tailleGrille;
+    public int _tailleGrille;
 
     // La grille instanciée sous forme de matrice
-    private CelluleDeGrille[,] _grille;
+    public CelluleDeGrille[,] _grille;
+
+
+
+    // On définie une référence unique pour accéder aux dimensions et à l'état des cases dans d'autres scripts
+    void Awake()
+    {
+        _instance = this;
+    }
 
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     // Icic elle sert de fonction d'initialisation
@@ -27,7 +47,7 @@ public class GridGenerator : MonoBehaviour
             {
                 // On y instaancie notre objet et on dit que la case est libre
                 _grille[x, z] = Instantiate(_celluleGrillePrefab, new Vector3(x,0,z), Quaternion.identity);
-                _grille[x, z].State = CelluleDeGrille.EtatDeCellule.Libre;
+                _grille[x, z].Etat = CelluleDeGrille.EtatDeCellule.Libre;
             }
         }
         // On dit que le joueur apparaît en (0,0), la case est juste coloriée en rouge pour l'instant
