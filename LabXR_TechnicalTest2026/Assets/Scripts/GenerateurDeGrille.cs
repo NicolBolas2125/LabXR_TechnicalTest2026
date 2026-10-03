@@ -24,6 +24,7 @@ public class GridGenerator : MonoBehaviour
                 _grille[x, z].State = CelluleDeGrille.EtatDeCellule.Libre;
             }
         }
+        _grille[0, 0].GetComponent<MeshRenderer>().material.color = Color.red;
     }
 
     // Update is called once per frame
