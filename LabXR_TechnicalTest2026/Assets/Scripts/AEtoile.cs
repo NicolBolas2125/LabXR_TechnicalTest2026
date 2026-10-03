@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using Unity.VisualScripting;
 using UnityEngine;
 
 public class AEtoile : MonoBehaviour
@@ -7,7 +8,7 @@ public class AEtoile : MonoBehaviour
     private Vector2 _cible;
 
     // Permet d'accéder à la variable hors de la classe
-    public Vector2 State
+    public Vector2 Cible
     {
         get { return _cible; }
         set { _cible = value; }
@@ -84,7 +85,7 @@ public class AEtoile : MonoBehaviour
         List<(Vector2, Vector2)> estTraite = new List<(Vector2, Vector2)>();
         
 
-        // Vérifie qu'on est pas arrivé à destination
+        // Vérifie qu'on est pas en train de tenter d'aller sur la case où on se trouve déjà
         bool fini = (xActuel == _cible.x) && (zActuel == _cible.y);
 
         // Execution de l'algorithme A*
@@ -143,29 +144,38 @@ public class AEtoile : MonoBehaviour
                 }
             }
 
-
-            // Maintenant on décide quel sommet sera le suivant
-            (Vector2, Vector2, int) suivant = aTraiter[0];
-            int fSuivant = f((int) suivant.Item1.x, (int) suivant.Item1.y, suivant.Item3);
-            foreach (var element in aTraiter)
+            // Si ce cas ce produit alors cela veut dire que après avoir tenté d'ajouter de nouveaux sommets, nous n'avons toujours de sommets à traiter.
+            // Le seul cas où cela peut se produire est si la destination se trouve de l'autre côté d'un mur que l'on ne peut pas contourner
+            // On choisi alors de ne pas bouger
+            if (aTraiter.Count == 0)
             {
-                int fATester = f((int) element.Item1.x, (int) element.Item1.y, element.Item3);
-                if (fATester < fSuivant)
-                {
-                    suivant = element;
-                    fSuivant = fATester;
-                }
+                return new Vector2[0];
             }
+            else
+            {
+                // Maintenant on décide quel sommet sera le suivant
+                (Vector2, Vector2, int) suivant = aTraiter[0];
+                int fSuivant = f((int) suivant.Item1.x, (int) suivant.Item1.y, suivant.Item3);
+                foreach (var element in aTraiter)
+                {
+                    int fATester = f((int) element.Item1.x, (int) element.Item1.y, element.Item3);
+                    if (fATester < fSuivant)
+                    {
+                        suivant = element;
+                        fSuivant = fATester;
+                    }
+                }
 
-            // On a notre élément suivant, on le retire de la liste "à traiter" et on l'ajoute à la liste "est traité"
-            aTraiter.Remove(suivant);
-            estTraite.Add((suivant.Item1, suivant.Item2));
-            
-            // On définie nos variables pour le tour de boucle suivant
-            xActuel = (int) suivant.Item1.x;
-            zActuel = (int) suivant.Item1.y;
-            g = G(suivant.Item3);
-            fini = (xActuel == _cible.x) && (zActuel == _cible.y);
+                // On a notre élément suivant, on le retire de la liste "à traiter" et on l'ajoute à la liste "est traité"
+                aTraiter.Remove(suivant);
+                estTraite.Add((suivant.Item1, suivant.Item2));
+                
+                // On définie nos variables pour le tour de boucle suivant
+                xActuel = (int) suivant.Item1.x;
+                zActuel = (int) suivant.Item1.y;
+                g = G(suivant.Item3);
+                fini = (xActuel == _cible.x) && (zActuel == _cible.y);
+            }
         }
 
         // On reconstruit le chemin à partir de notre tableau "est traité"
