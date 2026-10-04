@@ -38,6 +38,7 @@ public class GenerateurDeGrille : MonoBehaviour
         {
             Destroy(this);
         }
+        _tailleGrille = TransfertInformation.instance.Taille;
     }
 
     // Start is called once before the first execution of Update after the MonoBehaviour is created
