@@ -56,6 +56,12 @@ public class GenerateurDeGrille : MonoBehaviour
                 // On y instaancie notre objet et on dit que la case est libre
                 _grille[x, z] = Instantiate(_celluleGrillePrefab, new Vector3(x , 0, z), Quaternion.identity);
                 _grille[x, z].Etat = CelluleDeGrille.EtatDeCellule.Libre;
+                // Changement de couleur pour rendre le quadrillage plus visible
+                if ((x + z)%2 == 1)
+                {
+                    _grille[x, z]._couleurParDefaut = Color.lightCoral;
+                    _grille[x, z].GetComponent<MeshRenderer>().material.color = _grille[x, z]._couleurParDefaut;
+                }
             }
         }
         // On dit que le joueur apparaît en (0,0), la case est marquée comme occupée
