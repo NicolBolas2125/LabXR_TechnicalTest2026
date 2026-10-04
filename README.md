@@ -3,6 +3,8 @@ Test de compétence du LabXR de Liège
 Réalisé par:
 - Titouan DELEPORTE
 
+Aucune Intelligence Artificielle n'a été utilisée durant ce travail
+
 Structure du projet situé dans le dossier LabXR_TechnicalTest2026:
 
 LabXR_TechnicalTest2026
