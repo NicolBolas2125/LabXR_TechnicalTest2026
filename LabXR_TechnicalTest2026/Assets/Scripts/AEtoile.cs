@@ -45,12 +45,13 @@ public class AEtoile : MonoBehaviour
         
         // Définie l'arrivée comme la cible donnée au départ
         trajet[i] = _cible;
+        i = i-1;
 
         // Élément qu'on va chercher dans notre liste des sommets traités
         Vector2 cherche = _cible;
 
         // Recherche
-        while (i > 0)
+        while (i >= 0)
         {
             // On cherche le couple qui pointe vers le sommet qu'on cherche
             (Vector2, Vector2) suivant = traites.Find(element => element.Item1 == cherche);

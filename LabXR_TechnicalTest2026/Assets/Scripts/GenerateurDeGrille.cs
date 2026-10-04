@@ -30,7 +30,14 @@ public class GenerateurDeGrille : MonoBehaviour
     // On définie une référence unique pour accéder aux dimensions et à l'état des cases dans d'autres scripts
     void Awake()
     {
-        _instance = this;
+        if (instance == null)
+        {
+            _instance = this;
+        }
+        else
+        {
+            Destroy(this);
+        }
     }
 
     // Start is called once before the first execution of Update after the MonoBehaviour is created
@@ -46,12 +53,12 @@ public class GenerateurDeGrille : MonoBehaviour
             for (int z = 0; z < _tailleGrille; z = z + 1)
             {
                 // On y instaancie notre objet et on dit que la case est libre
-                _grille[x, z] = Instantiate(_celluleGrillePrefab, new Vector3(x,0,z), Quaternion.identity);
+                _grille[x, z] = Instantiate(_celluleGrillePrefab, new Vector3(x , 0, z), Quaternion.identity);
                 _grille[x, z].Etat = CelluleDeGrille.EtatDeCellule.Libre;
             }
         }
-        // On dit que le joueur apparaît en (0,0), la case est juste coloriée en rouge pour l'instant
-        _grille[0, 0].GetComponent<MeshRenderer>().material.color = Color.red;
+        // On dit que le joueur apparaît en (0,0), la case est marquée comme occupée
+        _grille[0, 0].Etat = CelluleDeGrille.EtatDeCellule.Occupee;
     }
 
     // Update is called once per frame

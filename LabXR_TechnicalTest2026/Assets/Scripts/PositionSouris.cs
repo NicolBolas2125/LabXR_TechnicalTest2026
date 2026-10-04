@@ -5,16 +5,26 @@ using UnityEngine.InputSystem;
 
 public class PositionSouris : MonoBehaviour
 {
-    private AEtoile calculChemin;
+    private AEtoile _calculChemin;
 
     [SerializeField]
     private Vector2[] chemin;
+
+    // Référence vers le pion
+    private MouvementPion _pion;
+
 
 
     // Awake sert à initialiser les variables utiles
     void Awake()
     {
-        calculChemin = GetComponent<AEtoile>();
+        _calculChemin = GetComponent<AEtoile>();
+    }
+
+    // On récupère l'instance dans Start() et non dans Awake() car elle est exécutée après (et donc le Awake de l'autre classe a le temps de bien définir l'instance)
+    void Start()
+    {
+        _pion = MouvementPion.instance;
     }
     // Update is called once per frame
     void Update()
@@ -29,17 +39,19 @@ public class PositionSouris : MonoBehaviour
                 // On récupère l'objet sélectionné
                 GameObject ObjetSelectionne = touche.collider.gameObject;
 
-                // On colorie cet objet en bleu
-                ObjetSelectionne.GetComponent<MeshRenderer>().material.color = Color.blue;
+                _calculChemin.Cible = new Vector2((int) ObjetSelectionne.transform.position.x, (int) ObjetSelectionne.transform.position.z);
+                
 
-                // On cherche à créer un chemin le menant à 0,0
-                calculChemin.Cible = new Vector2((int) ObjetSelectionne.transform.position.x, (int) ObjetSelectionne.transform.position.z);
-                chemin = calculChemin.Aetoile(0, 0);
-                GenerateurDeGrille grille = GenerateurDeGrille.instance;
-                foreach (var element in chemin)
+                if (_pion._cibleActuelle == -1)
                 {
-                    grille._grille[(int) element.x, (int) element.y].GetComponent<MeshRenderer>().material.color = Color.yellow;
+                    chemin = _calculChemin.Aetoile(Mathf.RoundToInt(_pion.transform.position.x), Mathf.RoundToInt(_pion.transform.position.z));
                 }
+                else
+                {
+                    chemin = _calculChemin.Aetoile((int) _pion.Cibles[_pion._cibleActuelle].x, (int) _pion.Cibles[_pion._cibleActuelle].z);
+                }
+
+                _pion.nouveauTrajet(chemin);
                 
             }
         }
@@ -53,12 +65,35 @@ public class PositionSouris : MonoBehaviour
             if( Physics.Raycast(ray, out touche) ){
                 // On récupère l'objet sélectionné
                 GameObject ObjetSelectionne = touche.collider.gameObject;
+                if (ObjetSelectionne.GetComponent<CelluleDeGrille>().Etat == CelluleDeGrille.EtatDeCellule.Libre)
+                {
 
-                // On colorie cet objet en rouge
-                ObjetSelectionne.GetComponent<MeshRenderer>().material.color = Color.red;
+                    // On colorie cet objet en rouge
+                    ObjetSelectionne.GetComponent<MeshRenderer>().material.color = Color.red;
 
-                // On verrouille cette case avec un mur
-                GenerateurDeGrille.instance._grille[ (int) ObjetSelectionne.transform.position.x, (int) ObjetSelectionne.transform.position.z].Etat = CelluleDeGrille.EtatDeCellule.Muree;
+                    // On verrouille cette case avec un mur
+                    GenerateurDeGrille.instance._grille[ (int) ObjetSelectionne.transform.position.x, (int) ObjetSelectionne.transform.position.z].Etat = CelluleDeGrille.EtatDeCellule.Muree;
+
+                    // On recalcule le chemin si le pion est en train de bouger
+                    if (_pion._cibleActuelle != -1)
+                    {
+                        chemin = _calculChemin.Aetoile((int) _pion.Cibles[_pion._cibleActuelle].x, (int) _pion.Cibles[_pion._cibleActuelle].z);
+                        _pion.nouveauTrajet(chemin);
+                    }
+                }
+                else
+                {
+                    // On vérifie si la case est déjjà murée
+                    if (ObjetSelectionne.GetComponent<CelluleDeGrille>().Etat == CelluleDeGrille.EtatDeCellule.Muree)
+                    {
+                        Debug.Log("Déjà murée");
+                    }
+                    // Elle est occupée
+                    else
+                    {
+                        Debug.Log("Case Occupée");
+                    }
+                }
             }
         }
     }
