@@ -20,5 +20,12 @@ public class CelluleDeGrille : MonoBehaviour
         set { _propreEtat = value; }
     }
 
+    // Variable permettant de ramener à la couleur par défaut en cas de besoin
+    public Color _couleurParDefaut;
 
+    // On enregistre la couleur initiale de l'objet
+    void Awake()
+    {
+        _couleurParDefaut = GetComponent<MeshRenderer>().material.color;
+    }
 }
