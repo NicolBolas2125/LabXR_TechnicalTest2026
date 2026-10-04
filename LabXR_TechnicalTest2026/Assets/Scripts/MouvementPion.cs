@@ -87,11 +87,15 @@ public class MouvementPion : MonoBehaviour
         if (destinationsSurLaGrille.Length == 0)
         {
             _peutAvoirNouvelleCible = false;
+            GestionUIJeu.instance.callRetourUtilisateur("La case visée n'est pas disponible");
+                       
             StartCoroutine(lancerTrajetVide());
             return;
         }
         // Si l'itinérraire reçu a des arrêts
         _peutAvoirNouvelleCible = false;
+        GestionUIJeu.instance.callRetourUtilisateur("Le pion se dirige vers la case : " + ((int) destinationsSurLaGrille[destinationsSurLaGrille.Length - 1].x, (int) destinationsSurLaGrille[destinationsSurLaGrille.Length - 1].y).ToString());
+                       
         StartCoroutine(lancerTrajet(destinationsSurLaGrille));
     }
 

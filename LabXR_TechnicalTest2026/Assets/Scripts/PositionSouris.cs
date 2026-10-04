@@ -3,8 +3,10 @@ using UnityEngine.InputSystem;
 
 public class PositionSouris : MonoBehaviour
 {
+    // Instance du A*
     private AEtoile _calculChemin;
 
+    // Variable stockant le chemin donné par A*
     [SerializeField]
     private Vector2[] chemin;
 
@@ -84,12 +86,12 @@ public class PositionSouris : MonoBehaviour
                     // On vérifie si la case est déjjà murée
                     if (ObjetSelectionne.GetComponent<CelluleDeGrille>().Etat == CelluleDeGrille.EtatDeCellule.Muree)
                     {
-                        Debug.Log("Déjà murée");
+                        GestionUIJeu.instance.callRetourUtilisateur("Case déjà murée");
                     }
                     // Elle est occupée
                     else
                     {
-                        Debug.Log("Case Occupée");
+                        GestionUIJeu.instance.callRetourUtilisateur("Case déjà Occupée");
                     }
                 }
             }

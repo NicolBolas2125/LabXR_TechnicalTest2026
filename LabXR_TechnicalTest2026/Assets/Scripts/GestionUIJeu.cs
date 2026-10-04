@@ -1,14 +1,35 @@
+using System.Collections;
 using TMPro;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
 public class GestionUIJeu : MonoBehaviour
 {
+    // Référence unique vers cette classe
+    static GestionUIJeu _instance;
 
-
-    // Affichage de la valeur du slider avant qu'on le tranfert
+    // Moyen d'accès hors de la classe
+    public static GestionUIJeu instance
+    {
+        get
+        {
+            return _instance;
+        }
+    }
+    
+    // Texte de retour pour l'utilisateur
     [SerializeField]
-    private TextMeshProUGUI _Text;
+    private GameObject _texteDeFeedback;
+
+    
+    // coroutine pour le retour utilisateur
+    private IEnumerator RetourUtilisateur(string message)
+    {
+        _texteDeFeedback.GetComponentInChildren<TextMeshProUGUI>().text = message;
+        _texteDeFeedback.SetActive(true);
+        yield return new WaitForSeconds(1f);
+        _texteDeFeedback.SetActive(false);
+    }
 
     // Fonction quand on veut retourner au menu
     public void Retour()
@@ -19,6 +40,7 @@ public class GestionUIJeu : MonoBehaviour
     // Fonction quand on veut réinitialiser la grille
     public void Reinitialiser()
     {
+        callRetourUtilisateur("Réinitialisation des murs");
         // On récupère la grille
         CelluleDeGrille[,] grille = GenerateurDeGrille.instance._grille;
         // Pour chaque case, on la rend libre si elle est murée
@@ -29,6 +51,25 @@ public class GestionUIJeu : MonoBehaviour
                 element.GetComponent<MeshRenderer>().material.color = element._couleurParDefaut;
                 element.Etat = CelluleDeGrille.EtatDeCellule.Libre;
             }
+        }
+    }
+
+    public void callRetourUtilisateur(string message)
+    {
+        StartCoroutine(RetourUtilisateur(message));
+    }
+
+    // On initialise nos variables de texte
+    void Awake()
+    {
+        _texteDeFeedback.SetActive(false);
+        if (instance == null)
+        {
+            _instance = this;
+        }
+        else
+        {
+            Destroy(this);
         }
     }
 }

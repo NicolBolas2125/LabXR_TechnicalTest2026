@@ -46,6 +46,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::PositionSouris
   chemin: []
+  _TexteDeRetour: {fileID: 3866549179032349922, guid: 545199d3ba93bfa4088bc5f12b2b7825, type: 3}
 --- !u!114 &6143820273652934124
 MonoBehaviour:
   m_ObjectHideFlags: 0
